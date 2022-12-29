@@ -25,6 +25,8 @@ public class BoardApiController {
 
     private final BoardService boardService; // Autowired로 스프링 빈에 등록
 
+    // git test. this is master
+
     @GetMapping("/api/board-list")
     public WrapperClass board_list() {
         List<Board> boardList = boardService.findBoards();
