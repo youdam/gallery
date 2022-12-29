@@ -40,6 +40,8 @@ public class BoardService {
     // 서버가 죽지않고 핸들링 하기 위하여 .뒤에 어쩌고 붙임
 
 
+    // github 확인용  (master)
+
     @Transactional //DB에 작용하는 거니까 안전하게 작동을 해야하니까. 생성이나 삭제등 DB에 직접 영향주는건 이거로 감싸주는게 좋음
     public void create(Board board) {
         boardRepository.save(board);
