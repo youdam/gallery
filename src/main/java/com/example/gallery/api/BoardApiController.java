@@ -33,7 +33,7 @@ public class BoardApiController {
         System.out.println("1. 요청와서 일단 만듦 boardList:" + boardList);
         List<BoardDto> boardDtoList = boardList.stream().map(b ->
                 new BoardDto(b)).collect(Collectors.toList());
-        System.out.println("2. 그걸 boardDtoList 로 맵핑함 : " + boardDtoList);
+        System.out.println("2. 그걸 boardDtoList 로 맵핑함. 처음엔 열어봤는데 그림너무 길어");
         System.out.println("+ 근데 이건 뭐냐 Collectors.tolist? : " + Collectors.toList());
         return new WrapperClass(boardDtoList);
     }
@@ -60,8 +60,9 @@ controller 니까, api만 받는 거고 내부 로직은 service가 담당함.
 
     @GetMapping("/api/board-detail/{boardId}")
     public WrapperClass board_detail(@PathVariable("boardId") Long boardId){
-        Board board = boardService.findOne(boardId);
+        Board board = boardService.findOne(boardId);    //entity애 boardId없지만, findOne자체가 primary key 만 뒤짐
         BoardDto boardDto = new BoardDto(board);
+        System.out.println("글 상세보기 ");
         return new WrapperClass(boardDto);
     }
 

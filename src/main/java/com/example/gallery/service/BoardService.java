@@ -70,6 +70,7 @@ public class BoardService {
 
     @Transactional
     public void delete(Board board) {
+
         boardRepository.delete(board);
     }
 
