@@ -1,20 +1,17 @@
 package com.example.gallery.api;
 
 
-import com.example.gallery.domain.Board;
-import com.example.gallery.domain.Comment;
+import com.example.gallery.domain.CommentEntity;
 import com.example.gallery.dto.CommentDeleteDto;
-import com.example.gallery.dto.CommentDto;
-import com.example.gallery.service.BoardService;
-import com.example.gallery.service.CommentService;
+import com.example.gallery.dtos.CommentDto;
+import com.example.gallery.services.BoardService;
+import com.example.gallery.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.MapsId;
-import javax.persistence.Table;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +29,7 @@ public class CommentApiController {
     //READ-COMMENT : 해당 게시글에 달린 댓글이 전부 가야하니 list로 보내겠음
     @GetMapping("/api/comment-list/{boardId}")
     public WrapperClass comment_list(@PathVariable("boardId") Long boardId) {
-        List<Comment> commentList = commentService.findByBoardId(boardId);
+        List<CommentEntity> commentList = commentService.findByBoardId(boardId);
         List<CommentDto> commentDtoList = commentList.stream().map(b-> new CommentDto(b)).collect(Collectors.toList());
 
         return new WrapperClass(commentDtoList);

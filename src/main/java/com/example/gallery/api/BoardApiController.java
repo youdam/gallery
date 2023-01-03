@@ -1,19 +1,16 @@
 package com.example.gallery.api;
 
-import com.example.gallery.domain.Board;
-import com.example.gallery.domain.Image;
+import com.example.gallery.domain.BoardEntity;
 import com.example.gallery.dto.BoardDeleteDto;
-import com.example.gallery.dto.BoardDto;
-import com.example.gallery.dto.ImageDto;
-import com.example.gallery.service.BoardService;
+import com.example.gallery.dtos.BoardDto;
+import com.example.gallery.services.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +26,7 @@ public class BoardApiController {
 
     @GetMapping("/api/board-list")
     public WrapperClass board_list() {
-        List<Board> boardList = boardService.findBoards();
+        List<BoardEntity> boardList = boardService.findBoards();
         System.out.println("1. 요청와서 일단 만듦 boardList:" + boardList);
         List<BoardDto> boardDtoList = boardList.stream().map(b ->
                 new BoardDto(b)).collect(Collectors.toList());
@@ -60,8 +57,8 @@ controller 니까, api만 받는 거고 내부 로직은 service가 담당함.
 
     @GetMapping("/api/board-detail/{boardId}")
     public WrapperClass board_detail(@PathVariable("boardId") Long boardId){
-        Board board = boardService.findOne(boardId);    //entity애 boardId없지만, findOne자체가 primary key 만 뒤짐
-        BoardDto boardDto = new BoardDto(board);
+        BoardEntity boardEntity = boardService.findOne(boardId);    //entity애 boardId없지만, findOne자체가 primary key 만 뒤짐
+        BoardDto boardDto = new BoardDto(boardEntity);
         System.out.println("글 상세보기 ");
         return new WrapperClass(boardDto);
     }
@@ -76,19 +73,18 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
 
     @PostMapping("/api/create-board")
     public ResponseEntity create_board(@RequestBody BoardDto boardDto){
+      //  String userid = SecurityUtil.getCurrentMemberId(); <- 로그인한 유저의 id
           System.out.println("create_board/boardDto = " + boardDto);
           HttpHeaders headers = new HttpHeaders();
           Map<String, String> body = new HashMap<>();
           HttpStatus status = HttpStatus.CREATED; // 201 잘 생성되었음을 의미
         try{
-                    Board board = new Board(
-                    boardDto.getId(),
+                    BoardEntity board = new BoardEntity(
                     boardDto.getTitle(),
+                    boardDto.getUserid(),
                     boardDto.getContent(),
-                    boardDto.getFileData(),
-                    boardDto.getFileName()
-
-            );
+                    boardDto.getGroupname()
+                          );
 
             boardService.create(board);
         } catch (Exception exception){
@@ -142,7 +138,7 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT; // 보낼 내용이 없다 수정 잘 댓다  204 -> 수정이 정상적으로 완료됬음을 의미
         try{
-            boardService.update(boardDto.getId(), boardDto.getTitle(), boardDto.getContent());
+            boardService.update(boardDto.getNo(), boardDto.getTitle(), boardDto.getContent());
         } catch (Exception exception){
             status = HttpStatus.BAD_REQUEST; // 400 에러
             System.out.println("update_board/exception = " + exception);
@@ -166,7 +162,7 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT; // 잘 됐따 보낼게 없다. 204
         try{
-            Board board = boardService.findOne(boardDeleteDto.getId()); // 이거 찾아서 
+            BoardEntity board = boardService.findOne(boardDeleteDto.getId()); // 이거 찾아서
             boardService.delete(board);   // 지워
         } catch (Exception exception){
             status = HttpStatus.BAD_REQUEST;
