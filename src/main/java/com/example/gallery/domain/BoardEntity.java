@@ -40,13 +40,14 @@ public class BoardEntity {
     @JoinColumn(name = "groupname", referencedColumnName = "groupname", insertable = false, updatable = false)
     private GroupEntity groupEntity;
 
-    public BoardEntity(String title, String userid, String content, String groupname) {
+    public BoardEntity(Long no, String title, String userid, String content, Long readcount, String groupname, LocalDateTime time) {
+        this.no = no;
         this.title = title;
         this.userid = userid;
         this.content = content;
         this.groupname = groupname;
-        this.readcount = 0L;
-        this.time = LocalDateTime.now();
+        this.readcount = readcount;
+        this.time = time;
     }
 
     public void setTitle(String title) {

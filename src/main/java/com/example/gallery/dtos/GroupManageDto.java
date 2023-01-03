@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -16,12 +17,15 @@ public class GroupManageDto {
 
     private String groupname;
 
+    private LocalDateTime time;
+
     private Long grade;
 
     public GroupManageDto (GroupManageEntity groupManageEntity){
         this.no = groupManageEntity.getNo();
         this.userid = groupManageEntity.getUserid();
         this.groupname = groupManageEntity.getGroupname();
+        this.time = groupManageEntity.getTime();
         this.grade = groupManageEntity.getGrade();
     }
 }

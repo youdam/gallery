@@ -79,11 +79,16 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
           Map<String, String> body = new HashMap<>();
           HttpStatus status = HttpStatus.CREATED; // 201 잘 생성되었음을 의미
         try{
+            LocalDateTime date = LocalDateTime.now();
+
                     BoardEntity board = new BoardEntity(
-                    boardDto.getTitle(),
-                    boardDto.getUserid(),
-                    boardDto.getContent(),
-                    boardDto.getGroupname()
+                            boardDto.getNo(),
+                            boardDto.getTitle(),
+                            boardDto.getUserid(),
+                            boardDto.getContent(),
+                            boardDto.getReadcount(),
+                            boardDto.getGroupname(),
+                            date
                           );
 
             boardService.create(board);

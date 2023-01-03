@@ -4,7 +4,7 @@ package com.example.gallery.dtos;
 import com.example.gallery.domain.MemberEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+//create랑 update기능 안쓸거니까 걍 안쓸거는 뺌
 @Data
 @NoArgsConstructor
 public class MemberDto {

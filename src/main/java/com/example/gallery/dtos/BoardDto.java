@@ -5,6 +5,9 @@ import com.example.gallery.domain.BoardEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Table;
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class BoardDto {
@@ -21,15 +24,17 @@ public class BoardDto {
 
     private String groupname;
 
-
+    private LocalDateTime time;
 
     public BoardDto(BoardEntity boardEntity) {
         this.no = boardEntity.getNo();
         this.title = boardEntity.getTitle();
         this.userid = boardEntity.getUserid();
         this.content = boardEntity.getContent();
-        this.readcount = boardEntity.getReadcount();
         this.groupname = boardEntity.getGroupname();
+        this.readcount = boardEntity.getReadcount();
+        this.time = boardEntity.getTime();
+
     }
 
 

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class CommentDto {
@@ -17,6 +19,8 @@ public class CommentDto {
 
     private String content;
 
+    private LocalDateTime time;
+
 
 
     public CommentDto(CommentEntity commentEntity){
@@ -24,6 +28,7 @@ public class CommentDto {
         this.userid = commentEntity.getUserid();
         this.contentNo = commentEntity.getContentNo();
         this.content = commentEntity.getContent();
+        this.time = commentEntity.getTime();
     }
 
 }

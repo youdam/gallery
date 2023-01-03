@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,11 +45,15 @@ public class CommentApiController {
         HttpStatus status = HttpStatus.CREATED;
 
         try {
-            Comment comment = new Comment(
-                    commentDto.getBoardId(),
-                    commentDto.getUserId(),
-                    commentDto.getContent_no(),
-                    commentDto.getContent()
+            LocalDateTime date = LocalDateTime.now();
+
+            CommentEntity comment = new CommentEntity(
+                    commentDto.getNo(),
+                    commentDto.getUserid(),
+                    commentDto.getContentNo(),
+                    commentDto.getContent(),
+                    date
+
             );
             commentService.create(comment);
         }catch (Exception exception){
@@ -66,7 +71,7 @@ public class CommentApiController {
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT;
         try {
-            commentService.update(commentDto.getContent_no(), commentDto.getContent());
+            commentService.update(commentDto.getContentNo(), commentDto.getContent());
 
         }catch (Exception exception){
             status = HttpStatus.BAD_REQUEST;
@@ -85,7 +90,7 @@ public class CommentApiController {
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT;
         try {
-            Comment comment = commentService.findOne(commentDeleteDto.getContent_no());
+            CommentEntity comment = commentService.findOne(commentDeleteDto.getContentNo());
             commentService.delete(comment);
         }catch (Exception exception){
             status = HttpStatus.BAD_REQUEST;
