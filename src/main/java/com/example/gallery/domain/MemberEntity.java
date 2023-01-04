@@ -30,22 +30,22 @@ public class MemberEntity {
     @Column(name = "time", nullable = false)
     private LocalDateTime time;
 
+    /*
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
-
+*/
     @Lob
     @Column(name = "profiledata")
     private String profiledata;
 
     public MemberEntity(String userid, String usernickname, String userpw, String useremail,
-                        LocalDateTime time, Role role, String profiledata) {
+                        LocalDateTime time, String profiledata) {
         this.userid = userid;
         this.usernickname = usernickname;
         this.userpw = userpw;
         this.useremail = useremail;
         this.time = time;
-        this.role = role;
         this.profiledata = profiledata;
     }
 }

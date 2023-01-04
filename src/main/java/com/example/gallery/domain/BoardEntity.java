@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -36,6 +37,9 @@ public class BoardEntity {
 
     @Column(name = "time", nullable = false)
     private LocalDateTime time;
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.ALL)
+    private List<FileEntity> files;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupname", referencedColumnName = "groupname", insertable = false, updatable = false)

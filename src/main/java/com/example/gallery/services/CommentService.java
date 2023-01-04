@@ -37,7 +37,7 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    public List<CommentEntity> findByBoardId(Long boardId) {
-        return commentRepository.findByContentNo(boardId);
+    public List<CommentEntity> findByBoardId(Long no) {
+        return commentRepository.findByContentNo(no);
     }
 }

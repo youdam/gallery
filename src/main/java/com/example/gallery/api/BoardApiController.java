@@ -1,9 +1,12 @@
 package com.example.gallery.api;
 
 import com.example.gallery.domain.BoardEntity;
+import com.example.gallery.domain.FileEntity;
 import com.example.gallery.dto.BoardDeleteDto;
 import com.example.gallery.dtos.BoardDto;
+import com.example.gallery.dtos.FileDto;
 import com.example.gallery.services.BoardService;
+import com.example.gallery.services.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ public class BoardApiController {
 
     private final BoardService boardService; // Autowired로 스프링 빈에 등록
 
+    private final FileService fileService;
     // git test. this is master
 
     @GetMapping("/api/board-list")
@@ -55,9 +59,9 @@ controller 니까, api만 받는 거고 내부 로직은 service가 담당함.
 
  */
 
-    @GetMapping("/api/board-detail/{boardId}")
-    public WrapperClass board_detail(@PathVariable("boardId") Long boardId){
-        BoardEntity boardEntity = boardService.findOne(boardId);    //entity애 boardId없지만, findOne자체가 primary key 만 뒤짐
+    @GetMapping("/api/board-detail/{no}")
+    public WrapperClass board_detail(@PathVariable("no") Long no){
+        BoardEntity boardEntity = boardService.findOne(no);    //entity애 boardId없지만, findOne자체가 primary key 만 뒤짐
         BoardDto boardDto = new BoardDto(boardEntity);
         System.out.println("글 상세보기 ");
         return new WrapperClass(boardDto);
@@ -74,54 +78,72 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
     @PostMapping("/api/create-board")
     public ResponseEntity create_board(@RequestBody BoardDto boardDto){
       //  String userid = SecurityUtil.getCurrentMemberId(); <- 로그인한 유저의 id
-          System.out.println("create_board/boardDto = " + boardDto);
-          HttpHeaders headers = new HttpHeaders();
-          Map<String, String> body = new HashMap<>();
-          HttpStatus status = HttpStatus.CREATED; // 201 잘 생성되었음을 의미
-        try{
-            LocalDateTime date = LocalDateTime.now();
+        //     System.out.println("create_board/boardDto = " + boardDto);
+        System.out.println("0. here");
+//          HttpHeaders headers = new HttpHeaders();
+  //        Map<String, String> body = new HashMap<>();
+    //      HttpStatus status = HttpStatus.CREATED; // 201 잘 생성되었음을 의미
+      //  try{
+            Long no = boardDto.getNo();
+            String title = boardDto.getTitle();
+            String userid = boardDto.getUserid();
+            String content = boardDto.getContent();
+            Long readcount = boardDto.getReadcount();
+            String groupname = boardDto.getGroupname();
+            List<FileDto> files = boardDto.getFiles();
+            System.out.println("1. here");
 
-                    BoardEntity board = new BoardEntity(
-                            boardDto.getNo(),
-                            boardDto.getTitle(),
-                            boardDto.getUserid(),
-                            boardDto.getContent(),
-                            boardDto.getReadcount(),
-                            boardDto.getGroupname(),
-                            date
-                          );
+            BoardEntity board = new BoardEntity(no, title, userid, content, readcount,
+                    groupname, LocalDateTime.now());
 
+            System.out.println("2. here");
             boardService.create(board);
-        } catch (Exception exception){
-           status = HttpStatus.BAD_REQUEST; // 400 에러
-           System.out.println("create_board/exception = " + exception);
-        }
-        return new ResponseEntity(body, headers, status);
+
+            System.out.println("3. here");
+
+            if(files.isEmpty()){
+                System.out.println("사진없엉");
+            }else {
+                for (FileDto fileDto : files) {
+                    FileEntity fileEntity = new FileEntity(no, fileDto.getFiledata(), board.getNo());
+                    fileService.createFile(fileEntity);
+                    System.out.println("4. here");
+
+                }
+
+            }
+
+        //} catch (Exception exception){
+          // status = HttpStatus.BAD_REQUEST; // 400 에러
+        //    System.out.println("실행안됨. 지금 BoardDTO에는? :" + boardDto);
+        //  System.out.println("create_board/exception = " + exception);
+//        }
+
+         return ResponseEntity.ok().build();
     }
 /*
-이제 안씀
     @PostMapping("/api/upload-image")
-    public ResponseEntity upload_image(@RequestParam("filedata") MultipartFile filedata,
-                                       @RequestParam("filename") String filename){
+    public ResponseEntity upload_image(@RequestBody FileDto fileDto){
         System.out.println("이미지 controller도착");
         HttpHeaders headers = new HttpHeaders();
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.CREATED; // 201 잘 생성되었음을 의미
         try {
-                    Image image = new Image();
-                    image.setId(null);
-                    image.setFilename(filename);
-                    image.setFiledata(filedata.getBytes());
+                    FileEntity file = new FileEntity(
+                            fileDto.getNo(),
+                            fileDto.getFiledata(),
+                            fileDto.getContentNo()
+                    );
 
-                    boardService.createpics(image);
+                fileService.create(file);
         } catch (Exception exception){
             status = HttpStatus.BAD_REQUEST; // 400 에러
             System.out.println("create_board/exception = " + exception);
         }
         return new ResponseEntity(body, headers, status);
     }
-
 */
+
     /*
     게시글 생성하기임.
     상태코드 (200, 300, 400, 500) 이런거 봐야할때 responseEntity 를 사용하면 좋음
@@ -167,7 +189,7 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT; // 잘 됐따 보낼게 없다. 204
         try{
-            BoardEntity board = boardService.findOne(boardDeleteDto.getId()); // 이거 찾아서
+            BoardEntity board = boardService.findOne(boardDeleteDto.getNo()); // 이거 찾아서
             boardService.delete(board);   // 지워
         } catch (Exception exception){
             status = HttpStatus.BAD_REQUEST;

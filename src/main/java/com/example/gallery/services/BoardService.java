@@ -21,12 +21,13 @@ public class BoardService {
     }
 
 
-    public BoardEntity findOne(Long boardId) {
-        return boardRepository.findById(boardId).orElseThrow(NullPointerException::new);
+    public BoardEntity findOne(Long no) {
+        return boardRepository.findById(no).orElseThrow(NullPointerException::new);
     }
 
     @Transactional
     public void create(BoardEntity board) {
+
         boardRepository.save(board);
     }
 

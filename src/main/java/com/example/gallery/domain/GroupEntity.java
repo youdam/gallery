@@ -16,6 +16,7 @@ public class GroupEntity {
 
 
     @Id
+    @Column (name = "groupname", nullable = false)
     private String groupname;
 
     @Column(name = "groupleader", nullable = false)

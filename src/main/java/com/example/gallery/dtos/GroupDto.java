@@ -3,7 +3,6 @@ package com.example.gallery.dtos;
 import com.example.gallery.domain.GroupEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.parameters.P;
 
 import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;

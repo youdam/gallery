@@ -24,13 +24,12 @@ public class CommentApiController {
 
     private final CommentService commentService;
 
-    private final BoardService boardService;
 
 
     //READ-COMMENT : 해당 게시글에 달린 댓글이 전부 가야하니 list로 보내겠음
-    @GetMapping("/api/comment-list/{boardId}")
-    public WrapperClass comment_list(@PathVariable("boardId") Long boardId) {
-        List<CommentEntity> commentList = commentService.findByBoardId(boardId);
+    @GetMapping("/api/comment-list/{no}")
+    public WrapperClass comment_list(@PathVariable("no") Long no) {
+        List<CommentEntity> commentList = commentService.findByBoardId(no);
         List<CommentDto> commentDtoList = commentList.stream().map(b-> new CommentDto(b)).collect(Collectors.toList());
 
         return new WrapperClass(commentDtoList);

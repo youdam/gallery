@@ -15,10 +15,8 @@ public class FileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "no", nullable = false)
     private Long no;
-
-    @Column(name = "filename", nullable = false)
-    private String filename;
 
     @Column(name = "filedata", nullable = false)
     private String filedata;
@@ -31,10 +29,9 @@ public class FileEntity {
     private BoardEntity boardEntity;
 
 
-    public FileEntity(Long no, String filename,
+    public FileEntity(Long no,
                       String filedata, Long contentNo){
         this.no =no;
-        this.filename = filename;
         this.filedata = filedata;
         this.contentNo =contentNo;
     }

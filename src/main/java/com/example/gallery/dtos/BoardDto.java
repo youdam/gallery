@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +28,8 @@ public class BoardDto {
 
     private LocalDateTime time;
 
+    private List<FileDto> files;
+
     public BoardDto(BoardEntity boardEntity) {
         this.no = boardEntity.getNo();
         this.title = boardEntity.getTitle();
@@ -34,7 +38,7 @@ public class BoardDto {
         this.groupname = boardEntity.getGroupname();
         this.readcount = boardEntity.getReadcount();
         this.time = boardEntity.getTime();
-
+        this.files = boardEntity.getFiles().stream().map(FileDto::new).collect(Collectors.toList());
     }
 
 
