@@ -9,11 +9,20 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/*  해당 오류 발생으로 인해서
+ : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
+  [Handler dispatch failed; nested exception is java.lang.StackOverflowError] with root cause
+
+java.lang.StackOverflowError: null
+	at com.example.gallery.domain.BoardEntity.toString(BoardEntity.java:16) ~[classes/:na]
+	at java.base/java.lang.String.valueOf(String.java:2951) ~[na:na]
+	at com.example.gallery.domain.FileEntity.toString(FileEntity.java:13) ~[classes/:na]
+ */
 @Entity
 @Data
 @Table(name = "board_tb")
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"files", "groupEntity"}) //이거 추가했음. fileentity 도 또까또까 -> 블로그
 public class BoardEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

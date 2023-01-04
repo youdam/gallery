@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "file_tb")
 @Data
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"boardEntity"})
 public class FileEntity {
 
     @Id

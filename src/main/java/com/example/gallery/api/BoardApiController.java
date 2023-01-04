@@ -76,7 +76,7 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
  */
 
     @PostMapping("/api/create-board")
-    public ResponseEntity create_board(@RequestBody BoardDto boardDto){
+    public ResponseEntity create_board(@RequestBody BoardDto boardDto)throws Exception{
       //  String userid = SecurityUtil.getCurrentMemberId(); <- 로그인한 유저의 id
         //     System.out.println("create_board/boardDto = " + boardDto);
         System.out.println("0. here");
@@ -101,10 +101,11 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
 
             System.out.println("3. here");
 
-            if(files.isEmpty()){
+            if(files == null){
                 System.out.println("사진없엉");
             }else {
                 for (FileDto fileDto : files) {
+                    System.out.println("왜굳이?");
                     FileEntity fileEntity = new FileEntity(no, fileDto.getFiledata(), board.getNo());
                     fileService.createFile(fileEntity);
                     System.out.println("4. here");
