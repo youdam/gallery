@@ -17,6 +17,7 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue
+    @Column( name = "no", nullable = false)
     private Long no;
 
     @Column(name = "userid", nullable = false)
