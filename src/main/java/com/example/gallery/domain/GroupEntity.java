@@ -1,5 +1,6 @@
 package com.example.gallery.domain;
 
+import com.example.gallery.dtos.GroupDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -31,12 +32,12 @@ public class GroupEntity {
 
 
 
-    public GroupEntity(String groupname, String groupleader,
-                       String descript, LocalDateTime time){
-        this.groupname = groupname;
-        this.groupleader = groupleader;
-        this.descript = descript;
-        this.time = time;
+    public GroupEntity(GroupDto groupDto){
+        this.groupname = groupDto.getGroupname();
+        this.descript = groupDto.getDescript();
+        this.time = LocalDateTime.now();
     }
+
+
 
 }

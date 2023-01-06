@@ -62,10 +62,31 @@ controller 니까, api만 받는 거고 내부 로직은 service가 담당함.
     @GetMapping("/api/board-detail/{no}")
     public WrapperClass board_detail(@PathVariable("no") Long no){
         BoardEntity boardEntity = boardService.findOne(no);    //entity애 boardId없지만, findOne자체가 primary key 만 뒤짐
+        System.out.println("글상세보기 entity 열어봄 " + boardEntity);
+       // List<FileEntity> fileEntities = fileService.findByBoardEntity(boardEntity);  //boardDto 에는 List<fileEntitiy> 가 없으니 해줘야함
+        //그냥 List<FileEntity> 를 추가하고싶다
+        /*
+         List<BoardDto> boardDtoList = boardList.stream().map(b ->
+                new BoardDto(b)).collect(Collectors.toList());
+         */
+      //  List<FileDto> files = fileEntities.stream().map(b-> new FileDto(b)).collect(Collectors.toList());
+
+
         BoardDto boardDto = new BoardDto(boardEntity);
-        System.out.println("글 상세보기 ");
+        System.out.println("글 상세보기: dto열어봄  " + boardDto);
         return new WrapperClass(boardDto);
     }
+
+    /*
+    @GetMapping("/api/board-detail/{no}")
+public WrapperClass board_detail(@PathVariable("no") Long no){
+    BoardEntity boardEntity = boardService.findOne(no);
+    List<FileEntity> fileEntities = fileService.findByBoardEntity(boardEntity);
+    BoardDto boardDto = new BoardDto(boardEntity, fileEntities);
+    return new WrapperClass(boardDto);
+}
+
+     */
 
 /*
 상세보기 페이지임.
@@ -80,27 +101,45 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
       //  String userid = SecurityUtil.getCurrentMemberId(); <- 로그인한 유저의 id
         //     System.out.println("create_board/boardDto = " + boardDto);
         System.out.println("0. here");
-//          HttpHeaders headers = new HttpHeaders();
-  //        Map<String, String> body = new HashMap<>();
-    //      HttpStatus status = HttpStatus.CREATED; // 201 잘 생성되었음을 의미
-      //  try{
-            Long no = boardDto.getNo();
-            String title = boardDto.getTitle();
-            String userid = boardDto.getUserid();
-            String content = boardDto.getContent();
-            Long readcount = boardDto.getReadcount();
-            String groupname = boardDto.getGroupname();
-            List<FileDto> files = boardDto.getFiles();
+
+        Long no = boardDto.getNo();
+        String title = boardDto.getTitle();
+        String userid = "damdam";
+        String content = boardDto.getContent();
+        Long readcount = Long.valueOf(0);
+        String groupname = "damgroup";
+        List<FileDto> files = boardDto.getFiles();    ////List<FIleEntity> 로 바꿔야함
+
+        if(files == null){
+            BoardEntity boardForNoFile = new BoardEntity(no, title, userid, content, readcount,
+                        groupname, LocalDateTime.now());
+            boardService.create(boardForNoFile);
+
+        }else {
             System.out.println("1. here");
 
             BoardEntity board = new BoardEntity(no, title, userid, content, readcount,
                     groupname, LocalDateTime.now());
 
-            System.out.println("2. here");
-            boardService.create(board);
+                    boardService.create(board);
 
-            System.out.println("3. here");
+            for (FileDto fileDto : files) {
+                System.out.println("왜굳이?");
+                FileEntity fileEntity = new FileEntity(no, fileDto.getFiledata(), board.getNo());
+                fileService.createFile(fileEntity);
+                System.out.println("4. here");
 
+                System.out.println("2. here. service가기 직전임 board:-> " + board);
+
+
+                System.out.println("3. here");
+            }
+
+        }
+
+                return ResponseEntity.ok().build();
+    }
+/*
             if(files == null){
                 System.out.println("사진없엉");
             }else {
@@ -113,15 +152,13 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
                 }
 
             }
-
+*/
         //} catch (Exception exception){
           // status = HttpStatus.BAD_REQUEST; // 400 에러
         //    System.out.println("실행안됨. 지금 BoardDTO에는? :" + boardDto);
         //  System.out.println("create_board/exception = " + exception);
 //        }
 
-         return ResponseEntity.ok().build();
-    }
 /*
     @PostMapping("/api/upload-image")
     public ResponseEntity upload_image(@RequestBody FileDto fileDto){
@@ -190,8 +227,11 @@ getMapping 되어온 ("boardId") 를, Long boardId 변수로 가져오겠다는 
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT; // 잘 됐따 보낼게 없다. 204
         try{
+            System.out.println("잘찾았냐? getNO: " + boardDeleteDto.getNo());
             BoardEntity board = boardService.findOne(boardDeleteDto.getNo()); // 이거 찾아서
+            System.out.println("잘 골랐나 보자 :board" + board );
             boardService.delete(board);   // 지워
+            System.out.println("삭제 되었나 보자 : board " + board);
         } catch (Exception exception){
             status = HttpStatus.BAD_REQUEST;
             System.out.println("delete_board/exception = " + exception);

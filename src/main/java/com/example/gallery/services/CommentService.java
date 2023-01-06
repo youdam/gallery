@@ -22,13 +22,13 @@ public class CommentService {
     }
 
     @Transactional
-    public void update(Long contentNo, String content) {
-        CommentEntity findComment = commentRepository.findById(contentNo).orElseThrow(NullPointerException::new);
+    public void update(Long no, String content) {
+        CommentEntity findComment = commentRepository.findById(no).orElseThrow(NullPointerException::new);
         findComment.setContent(content);
     }
 
-    public CommentEntity findOne(Long contentNo) {
-        return commentRepository.findById(contentNo).orElseThrow(NullPointerException::new);
+    public CommentEntity findOne(Long no) {
+        return commentRepository.findById(no).orElseThrow(NullPointerException::new);
 
     }
 

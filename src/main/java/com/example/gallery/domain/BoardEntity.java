@@ -1,6 +1,7 @@
 package com.example.gallery.domain;
 
 import com.example.gallery.domain.GroupEntity;
+import com.example.gallery.dtos.FileDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -50,11 +51,28 @@ public class BoardEntity {
     @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.ALL)
     private List<FileEntity> files;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.ALL)
+    private List<CommentEntity> comment;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "groupname", referencedColumnName = "groupname", insertable = false, updatable = false)
     private GroupEntity groupEntity;
 
-    public BoardEntity(Long no, String title, String userid, String content, Long readcount, String groupname, LocalDateTime time) {
+    public BoardEntity(Long no, String title, String userid, String content,
+                       Long readcount, String groupname, LocalDateTime time,
+                       List<FileEntity> files) {
+        this.no = no;
+        this.title = title;
+        this.userid = userid;
+        this.content = content;
+        this.groupname = groupname;
+        this.readcount = readcount;
+        this.time = time;
+        this.files = files;
+    }
+
+    public BoardEntity(Long no, String title, String userid, String content,
+                             Long readcount, String groupname, LocalDateTime time) {
         this.no = no;
         this.title = title;
         this.userid = userid;
@@ -63,6 +81,7 @@ public class BoardEntity {
         this.readcount = readcount;
         this.time = time;
     }
+
 
     public void setTitle(String title) {
         if (title == null || title.trim().isEmpty()) {

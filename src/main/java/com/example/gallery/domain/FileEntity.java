@@ -1,5 +1,6 @@
 package com.example.gallery.domain;
 
+import com.example.gallery.dtos.FileDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -24,7 +25,7 @@ public class FileEntity {
     @Column(name = "content_no", nullable = false)
     private Long contentNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "content_no", referencedColumnName = "no", insertable = false, updatable = false)
     private BoardEntity boardEntity;
 
@@ -34,5 +35,11 @@ public class FileEntity {
         this.no =no;
         this.filedata = filedata;
         this.contentNo =contentNo;
+    }
+
+    public FileEntity(FileDto fileDto) {
+        this.no = fileDto.getNo();
+        this.filedata = fileDto.getFiledata();
+        this.contentNo = fileDto.getContentNo();
     }
 }

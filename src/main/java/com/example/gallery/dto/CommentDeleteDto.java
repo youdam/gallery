@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDeleteDto {
 
-    private Long contentNo;
+    private Long no;
 }
 
 //  private String userId;  당장 없음

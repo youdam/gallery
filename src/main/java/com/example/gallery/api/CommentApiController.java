@@ -70,8 +70,9 @@ public class CommentApiController {
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT;
         try {
-            commentService.update(commentDto.getContentNo(), commentDto.getContent());
-
+            System.out.println("업데이트 try");
+            commentService.update(commentDto.getNo(), commentDto.getContent());
+            System.out.println("업데이트 try 종료 ");
         }catch (Exception exception){
             status = HttpStatus.BAD_REQUEST;
 
@@ -89,7 +90,7 @@ public class CommentApiController {
         Map<String, String> body = new HashMap<>();
         HttpStatus status = HttpStatus.NO_CONTENT;
         try {
-            CommentEntity comment = commentService.findOne(commentDeleteDto.getContentNo());
+            CommentEntity comment = commentService.findOne(commentDeleteDto.getNo());
             commentService.delete(comment);
         }catch (Exception exception){
             status = HttpStatus.BAD_REQUEST;

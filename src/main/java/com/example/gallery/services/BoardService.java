@@ -29,6 +29,10 @@ public class BoardService {
     public void create(BoardEntity board) {
 
         boardRepository.save(board);
+
+        //여기부터 추가
+
+
     }
 
     @Transactional
@@ -39,7 +43,9 @@ public class BoardService {
     }
 
 
+    @Transactional
     public void delete(BoardEntity board) {
+
         boardRepository.delete(board);
     }
 }

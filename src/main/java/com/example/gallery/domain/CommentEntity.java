@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "comment_tb")
 @Data
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"boardEntity"})
 public class CommentEntity {
 
     @Id
